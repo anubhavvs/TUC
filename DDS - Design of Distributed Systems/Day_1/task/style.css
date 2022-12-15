@@ -1,0 +1,89 @@
+body {
+  width: 1080px;
+  margin: auto;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: blue;
+  font-family: "Roboto Slab", serif;
+  font-size: 50px;
+  margin: 0 0 1em 0;
+}
+
+li {
+  list-style-type: disc;
+}
+
+span:not(.extra) {
+  color: red;
+}
+
+input[type="text"] {
+  border-color: gray;
+  border-radius: 0.375em;
+  height: 2.5em;
+  padding: 1em 0;
+  margin: 5px;
+  outline: none;
+}
+
+a:link {
+  background-color: yellow;
+}
+
+a:visited {
+  background-color: cyan;
+}
+
+a:hover {
+  background-color: lightgreen;
+}
+
+a:active {
+  background-color: hotpink;
+}
+
+input[type="text"]:focus {
+  border-color: red;
+}
+
+.clearfix {
+  display: flow-root;
+}
+
+.image {
+  float: right;
+}
+
+#main-content {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  background-color: #fff;
+}
+
+#sidebar {
+  background-color: gray;
+  font-size: 0.9em;
+  padding: 10px;
+  width: 36%;
+}
+
+#sidebar > .inner {
+  padding: 2.2em 2.2em 2.4em 2.2em;
+  width: 23em;
+}
+
+#sidebar > .inner > * {
+  border-bottom: 1em solid wheat;
+}
+
+#main {
+  width: 62%;
+  padding: 10px;
+}
