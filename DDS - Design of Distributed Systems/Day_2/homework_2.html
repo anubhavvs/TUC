@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<!-- saved from url=(0160)https://bildungsportal.sachsen.de/opal/g/PEEK_VIEW_WRAPPER-%2D36975345689-%2D1661221591706168007-%2D102696604532461_global/02_tutorial_js_basics/homework_2.html -->
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <style>
+        * {
+            font: 14px normal Arial, sans-serif;
+            color: #000000;
+        }
+
+        table {
+            margin: 50px auto;
+        }
+
+        table,
+        td {
+            border: 1px solid #aaa;
+            border-collapse: collapse;
+        }
+
+        th {
+            padding: 10px;
+            font-weight: bold;
+        }
+
+        td {
+            background-color: #eeeeee;
+            width: 80px;
+            height: 80px;
+            cursor: pointer;
+        }
+
+        div#Log {
+            position: absolute;
+            top: 50px;
+            left: 50%;
+            width: 120px;
+            height: 310px;
+            margin-left: 180px;
+            background-color: #eeeeee;
+            border: 1px solid #aaa;
+            padding: 10px;
+            overflow: auto;
+        }
+    </style>
+    <script>
+        var fillColor = null;
+        var Log = null;
+        var fieldCount = 0;
+        window.onload = () => {
+            Log = document.getElementById('Log')
+        }
+        function rgbToHex(r, g, b) {
+            return "#" + (1 << 24 | r << 16 | g << 8 | b).toString(16).slice(1).toUpperCase();
+        }
+        function setFillColor(color) {
+            fillColor = color;
+            var newLog = document.createElement('span')
+            newLog.innerHTML = 'Color changed\n'
+            newLog.style.color = fillColor
+            Log.appendChild(newLog)
+        }
+        function setField(cell) {
+            let color = window.getComputedStyle(cell).backgroundColor.slice(4, -1).split(', ').map(Number);
+            let hexColor = rgbToHex(color[0], color[1], color[2])
+            console.log(hexColor)
+            if (fillColor == hexColor) {
+                cell.style.backgroundColor = '#EEEEEE';
+            }
+            else if (fillColor) {
+                cell.style.backgroundColor = fillColor;
+                fieldCount += 1;
+                checkForField(fieldCount)
+            }
+        }
+        function checkForField(count) {
+            if (count == 10) {
+                alert('"You have clicked 10 times on the field!"')
+            }
+            console.log(count)
+        }
+
+    </script>
+</head>
+
+<body data-new-gr-c-s-check-loaded="14.1087.0" data-gr-ext-installed="" cz-shortcut-listen="true">
+    <div id="Log"></div>
+
+    <table>
+        <tbody>
+            <tr>
+                <td onclick="setField(this)"></td>
+                <td onclick="setField(this)"></td>
+                <td onclick="setField(this)"></td>
+                <td onclick="setField(this)"></td>
+            </tr>
+            <tr>
+                <td onclick="setField(this)"></td>
+                <td onclick="setField(this)"></td>
+                <td onclick="setField(this)"></td>
+                <td onclick="setField(this)"></td>
+            </tr>
+            <tr>
+                <td onclick="setField(this)"></td>
+                <td onclick="setField(this)"></td>
+                <td onclick="setField(this)"></td>
+                <td onclick="setField(this)"></td>
+            </tr>
+            <tr>
+                <td onclick="setField(this)"></td>
+                <td onclick="setField(this)"></td>
+                <td onclick="setField(this)"></td>
+                <td onclick="setField(this)"></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table>
+        <tbody>
+            <tr>
+                <th colspan="4">Choose a color:</th>
+            </tr>
+            <tr>
+                <td onclick="setFillColor(&#39;#CC3333&#39;)" style="background-color: #CC3333;"></td>
+                <td onclick="setFillColor(&#39;#3399FF&#39;)" style="background-color: #3399FF;"></td>
+                <td onclick="setFillColor(&#39;#339933&#39;)" style="background-color: #339933;"></td>
+                <td onclick="setFillColor(&#39;#999933&#39;)" style="background-color: #999933;"></td>
+            </tr>
+        </tbody>
+    </table>
+
+
+
+
+</body>
+<grammarly-desktop-integration data-grammarly-shadow-root="true"></grammarly-desktop-integration>
+
+</html>
