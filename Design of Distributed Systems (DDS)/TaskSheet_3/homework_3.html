@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="generator" content="olat-tinymce-3" />
+
+    <meta charset="UTF-8" />
+    <style>
+        * {
+            font: 14px normal Arial, sans-serif;
+            color: #000000;
+            box-sizing: border-box;
+        }
+
+        table {
+            margin: 50px auto;
+        }
+
+        table,
+        td {
+            border: 1px solid #aaa;
+            border-collapse: collapse;
+        }
+
+        th {
+            padding: 10px;
+            font-weight: bold;
+        }
+
+        td {
+            background-color: #eeeeee;
+            width: 80px;
+            height: 80px;
+        }
+
+        table:first-child tr td {
+            cursor: pointer;
+        }
+
+        td {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <table>
+        <tbody>
+            <tr>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+            </tr>
+        </tbody>
+    </table>
+    <table>
+        <thead>
+            <tr>
+                <th colspan="4">Fill a field:</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Text: <br /><input type="text" id="text" value="" autocomplete="off" /></td>
+                <td>Field X: <br /><input type="text" id="field_x" value="" autocomplete="off" /></td>
+                <td>Field Y: <br /><input type="text" id="field_y" value="" autocomplete="off" /></td>
+                <td>CSS: <br /><input type="text" id="css" value="" autocomplete="off" /></td>
+            </tr>
+            <tr>
+                <td colspan="4"><button id="mybutton">Fill</button></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <script>
+        var text = document.querySelector('#text')
+        var field_x = document.querySelector('#field_x')
+        var field_y = document.querySelector('#field_y')
+        var css = document.querySelector('#css')
+        var tr = document.querySelectorAll('tr')
+        var td = document.querySelectorAll('td')
+        var length = tr.length - 4;
+
+        var onClick = (e) => {
+            if (e.target.innerHTML !== '&nbsp;') {
+                e.target.innerHTML = '&nbsp;';
+                e.target.removeAttribute('style');
+            }
+        }
+
+        var table_td = [...td]
+        table_td.slice(0, -5).forEach((element) => element.addEventListener('click', onClick));
+
+        var onFill = (text, x, y, css) => {
+            if (x > length || y > length) {
+                var diff = Math.max(x, y) - length;
+                for (let i = 0; i < diff; i++) {
+                    var table = document.querySelectorAll('table')[0];
+                    var row = table.insertRow();
+                    for (let j = 0; j <= length; j++) {
+                        var cell = row.insertCell();
+                        cell.innerHTML = '\u00A0';
+                        cell.addEventListener('click', onClick);
+                    }
+                }
+                length = Math.max(x, y)
+                for (let i = 0; i <= length; i++) {
+                    tr = document.querySelectorAll('tr')
+                    for (let j = 0; j < diff; j++) {
+                        var new_col = tr[i].insertCell();
+                        new_col.innerHTML = '\u00A0';
+                        new_col.addEventListener('click', onClick);
+                    }
+                }
+            }
+
+            else {
+                var data_tr = [...tr].slice(0, -3);
+                for (let i = 0; i < data_tr.length; i++) {
+                    var data_td = [...data_tr[i].childNodes].filter((el, ind) => { return el.nodeName !== '#text' })
+                    for (let j = 0; j < data_td.length; j++) {
+                        if (x === j && y === i) {
+                            if (text.length !== 0)
+                                data_td[j].innerHTML = text;
+                            if (css.length !== 0)
+                                data_td[j].setAttribute('style', css)
+                        }
+                    }
+                }
+            }
+
+        }
+
+        var button = document.querySelector('#mybutton')
+        button.addEventListener('click', () => onFill(text.value, parseInt(field_x.value), parseInt(field_y.value), css.value))
+
+    </script>
+</body>
+
+</html>
