@@ -1,0 +1,147 @@
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<style>
+		table {
+			text-align: center;
+			font-size: 3rem;
+		}
+
+		.cell {
+			height: 100px;
+			width: 100px;
+			border: 1.5px solid grey;
+			border-style: inset;
+			box-sizing: border-box;
+			cursor: pointer;
+			user-select: none;
+		}
+
+		.cell:hover {
+			border: 3px solid red;
+		}
+
+		.selectedCell {
+			border: 3px solid red;
+		}
+
+		.blackcell {
+			background-color: black;
+			color: white;
+		}
+
+		.whitecell {
+			background-color: white;
+			color: black;
+		}
+	</style>
+	<title>Chessboard</title>
+</head>
+
+<body>
+
+	<table>
+	</table>
+
+	<script>
+		// create the chess board
+		var chessboard = document.querySelector('table')
+
+		for (var i = 1; i <= 8; i++) {
+			var tr = document.createElement('tr');
+			for (var j = 1; j <= 8; j++) {
+				var td = document.createElement('td');
+				if ((i + j) % 2 == 0) {
+					td.setAttribute('class', 'cell whitecell');
+					tr.appendChild(td);
+				}
+				else {
+					td.setAttribute('class', 'cell blackcell');
+
+					tr.appendChild(td);
+				}
+				td.setAttribute('x_y', `${i} ${j}`)
+			}
+			chessboard.appendChild(tr);
+		}
+		document.querySelector('body').appendChild(chessboard)
+
+		// add the chess symbols
+		var initial_tower = document.querySelector('td[x_y="1 1"]')
+		initial_tower.innerHTML = '&#9814;'
+		initial_tower.setAttribute('data', 'tower')
+
+		var initial_knight = document.querySelector('td[x_y="1 2"]')
+		initial_knight.innerHTML = '&#9816;'
+		initial_knight.setAttribute('data', 'knight')
+
+		var initial_bishop = document.querySelector('td[x_y="1 3"]')
+		initial_bishop.innerHTML = '&#9815;'
+		initial_bishop.setAttribute('data', 'bishop')
+
+		// state global variables
+		var initial_state = false;
+		var selected_piece = null;
+		var selected_piece_name = null;
+		var x1 = null;
+		var y1 = null;
+
+		// check move function
+		var moveCheck = (x2, y2) => {
+			if (selected_piece_name === 'bishop') {
+				if (Math.abs(x2 - x1) === Math.abs(y2 - y1))
+					return true;
+			}
+			if (selected_piece_name === 'knight') {
+				if ((Math.abs(x2 - x1) === 1 && Math.abs(y2 - y1) === 2) || (Math.abs(y2 - y1) === 1 && Math.abs(x2 - x1) === 2)) {
+					return true;
+				}
+			}
+			if (selected_piece_name === 'tower') {
+				if (x2 === x1 || y2 === y1)
+					return true;
+			}
+			return false
+		}
+
+		// onclick handler
+		var onclickHandler = (element) => {
+			var x, y;
+			[x, y] = element.getAttribute('x_y').split(' ')
+			if (!initial_state && element.innerHTML !== '') {
+				element.classList.add('selectedCell')
+				initial_state = true
+				selected_piece = element
+				selected_piece_name = element.getAttribute('data');
+				x1 = x;
+				y1 = y;
+			} else if (initial_state && element.innerHTML === '') {
+				if (moveCheck(x, y)) {
+					element.innerHTML = selected_piece_name === 'bishop' ? '&#9815;' : selected_piece_name === 'knight' ? '&#9816;' : '&#9814;';
+					element.setAttribute('data', selected_piece_name);
+					selected_piece.classList.remove('selectedCell');
+					selected_piece.removeAttribute('data');
+					selected_piece.innerHTML = '';
+					initial_state = false;
+					selected_piece = null;
+					selected_piece_name = null;
+					x1 = null;
+					y1 = null;
+				} else {
+					alert(`Invalid move for ${selected_piece_name}!`);
+				}
+			} else if (initial_state && element.innerHTML !== '') {
+				alert('Already occupied!')
+			}
+		}
+
+		// bind function
+		document.querySelectorAll('td').forEach(element => {
+			element.addEventListener('click', () => onclickHandler(element))
+		});
+	</script>
+
+</body>
+
+</html>
