@@ -1,0 +1,11 @@
+# Python
+.idea
+__pycache__
+
+# NodeJS
+node_modules/
+
+# C# and .NET
+.vs
+bin/
+obj/
