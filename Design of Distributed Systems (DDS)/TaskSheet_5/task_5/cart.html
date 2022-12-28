@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="de-DE">
+
+<head>
+    <meta charset="UTF-8" />
+    <style>
+        body {
+            font: 15px normal Arial, sans-serif;
+            color: #000000;
+        }
+
+        label {
+            width: 5em;
+            display: inline-block;
+        }
+
+        ul {
+            padding: 0;
+        }
+
+        form {
+            display: inline;
+        }
+
+        .delete {
+            margin-left: 12px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Shopping Cart</h1>
+    <ul>
+    </ul>
+    </form>
+    <hr>
+    <img src="cart.gif">
+    <hr>
+    <form method="POST" action="/">
+        <label for="name">Name</label> <input id="name" type="text" name="name" placeholder="Name"
+            autocomplete="off"><br>
+        <label for="amount">Amount</label> <input autocomplete="off" id="amount" type="number" name="amount"
+            placeholder="Amount"><br>
+        <input type="hidden" name="action" value="add">
+        <button type="submit">Add entry</button>
+    </form>
+    <script>
+
+        const URL = 'http://localhost:3000/cart';
+
+        function deleteHandler(id) {
+            console.log(id);
+
+            var request = new XMLHttpRequest();
+            var response;
+
+            request.open('DELETE', URL + '/' + id);
+
+            request.onreadystatechange = function () {
+                if (this.readyState === 4 && this.status === 200) {
+                    window.location.reload()
+                }
+            }
+
+            request.send();
+
+        }
+
+        function onSubmit(e) {
+            e.preventDefault();
+
+            var name = document.querySelector('input[type="text"]');
+            var amount = document.querySelector('input[type="number"]');
+            var response;
+
+            var data = {
+                name: name.value,
+                amount: amount.value
+            }
+
+            var request = new XMLHttpRequest();
+            var response;
+
+            request.open('POST', URL);
+            request.setRequestHeader('Content-type', 'application/json');
+
+            request.onreadystatechange = function () {
+                if (this.readyState === 4 && this.status === 200) {
+                    window.location.reload()
+                }
+            }
+
+            request.send(JSON.stringify(data));
+        }
+
+        function onLoad() {
+            var request = new XMLHttpRequest();
+            var response = [];
+            var list = document.querySelector('ul');
+
+            request.open('GET', URL);
+
+            request.onreadystatechange = function () {
+                if (this.readyState === 4 && this.status === 200) {
+                    response = JSON.parse(this.responseText);
+                    response.forEach(element => {
+                        var listItem = document.createElement('li');
+                        var itemText = document.createTextNode(element.amount + 'x ' + element.name);
+                        var deleteButton = document.createElement('button');
+                        deleteButton.setAttribute('class', 'delete');
+                        deleteButton.innerHTML = 'delete'
+                        deleteButton.addEventListener('click', () => deleteHandler(element.id))
+
+                        listItem.appendChild(itemText);
+                        listItem.appendChild(deleteButton)
+                        list.appendChild(listItem);
+                    });
+                }
+            }
+
+            request.send();
+        }
+
+        onLoad();
+
+        var addEntryButton = document.querySelector('button[type="submit"]');
+        addEntryButton.addEventListener('click', onSubmit);
+
+    </script>
+</body>
+
+</html>
