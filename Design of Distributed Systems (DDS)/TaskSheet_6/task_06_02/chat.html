@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>WebSocket Client</title>
+	<style>
+		#output {
+			border: solid 1px #000;
+			padding: 5px;
+		}
+	</style>
+</head>
+
+<body>
+
+	<form id="form">
+		<input type="text" id="message">
+		<button type="submit">Send</button>
+	</form>
+
+	<hr>
+	<div id="output"></div>
+
+	<script type="text/javascript">
+
+		var inputBox = document.getElementById("message");
+		var output = document.getElementById("output");
+		var form = document.getElementById("form");
+
+		try {
+			var host = "ws://localhost:3000";
+			console.log("Host:", host);
+
+			//Open up a WebSocket connection named s
+			var s = new WebSocket(host);
+
+			s.onopen = e => {
+				// Log message that the socket is open
+				console.log('Socket is open');
+			};
+
+			s.onclose = e => {
+				// Log message that the socket is closed
+				console.log('Socket is close');
+			};
+
+			s.onmessage = e => {
+				// Write the messages from the server to the output
+				var message = e.data;
+				var textMessage = document.createTextNode(message);
+				var br = document.createElement("br");
+				output.appendChild(textMessage);
+				output.appendChild(br);
+			};
+
+			s.onerror = function (e) {
+				console.log("Socket error:", e);
+			};
+
+		} catch (ex) {
+			console.log("Socket exception:", ex);
+		}
+
+		form.onsubmit = function (e) {
+			e.preventDefault();
+			s.send(inputBox.value);
+			inputBox.value = '';
+		}
+
+	</script>
+
+
+</body>
+
+</html>
