@@ -4,6 +4,7 @@ __pycache__
 
 # NodeJS
 node_modules/
+.test/
 
 # C# and .NET
 .vs
