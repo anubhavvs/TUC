@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <title>Shop</title>
+  <style>
+    body {
+      width: 1080px;
+      margin: auto;
+    }
+
+    #grid {
+      display: grid;
+      grid-template-columns: auto auto auto;
+    }
+  </style>
+</head>
+
+<body>
+  <script>
+    // Add script for WebComponent here
+    const template = document.createElement('templates');
+
+    template.innerHTML = `
+      <style>
+        .product {
+          max-width: 340px;
+          margin: 10px;
+        }
+
+        .image {
+          width: 300px;
+          height: 300px;
+          margin: 0 auto;
+        }
+
+        img {
+          width: 100%;
+          height: 100%;
+        }
+      </style>
+      <div class="product">
+        <div class="image">
+          <img />
+        </div>
+        <h3 class="title"></h3>
+        <p class="price"></p>
+        <p class="description">
+          <slot name="description" />
+        </p>
+      </div>
+    `
+
+    class ProductCard extends HTMLElement {
+      constructor() {
+        super();
+
+        this.attachShadow({ mode: 'open' });
+
+        this.shadowRoot.appendChild(template.cloneNode(true));
+      }
+
+      connectedCallback() {
+        this.shadowRoot.querySelector('.title').innerText = this.getAttribute('title') || 'Productname';
+        this.shadowRoot.querySelector('.price').innerText = (this.getAttribute('price') || '0,00') + '€';
+        this.shadowRoot.querySelector('img').src = this.getAttribute('image') || 'placeholder.png';
+      }
+    }
+
+    window.customElements.define('product-card', ProductCard);
+  </script>
+
+  <!--Add HTML Template here-->
+  <h1>Shop Products</h1>
+  <div id="grid">
+    <product-card title="Apple" price="9,30"
+      image="https://upload.wikimedia.org/wikipedia/commons/2/25/Alice_%28apple%29.jpg">
+      <div slot="description">
+        Apple trees are cultivated worldwide and are the most widely grown species in the genus
+        Malus. The tree originated in Central Asia, where its wild ancestor, Malus sieversii, is still found today.
+      </div>
+    </product-card>
+    <product-card title="" price="" image="">
+      <div slot="description">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda facere vel, inventore autem sed quo libero
+        nulla laborum consequatur error! Accusamus, quibusdam pariatur.
+      </div>
+    </product-card>
+    <product-card title="Banana" price="5,91"
+      image="https://upload.wikimedia.org/wikipedia/commons/4/44/Bananas_white_background_DS.jpg">
+      <div slot="description">
+        A banana is an elongated, edible fruit botanically a berry produced by several kinds of large
+        herbaceous flowering plants in the genus Musa.
+      </div>
+    </product-card>
+  </div>
+
+</body>
+
+</html>
